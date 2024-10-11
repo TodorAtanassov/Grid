@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Link;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ColorController;
+use App\Http\Requests\LinkRequest;
 
 Route::get('/', function(){
     return redirect()->route('links.index');
@@ -24,7 +25,7 @@ Route::delete('/grid/{link}', function (Link $link) {
 })->name('links.destroy');
 
 
-Route::post('/grid/create', function(Request $request){
+Route::post('/grid/create', function (Request $request) {
     $data = $request;
     $link = new Link;
     $link->title = $data['title'];
@@ -32,16 +33,18 @@ Route::post('/grid/create', function(Request $request){
     $link->color = $data['color'];
     $link->save();
 
+
     return redirect()->route('links.index');
 })->name('links.store');
 
-Route::put('/grid/edit/{id}', function(Request $request ,$id){
+Route::put('/grid/edit/{id}', function (Link $link, Request $request, $id) {
     $data = $request;
     $link = Link::findorfail($id);
     $link->title = $data['title'];
     $link->page = $data['page'];
     $link->color = $data['color'];
     $link->save();
+
 
     return redirect()->route('links.index');
 })->name('links.update');
